@@ -14,9 +14,13 @@ RUN   apt-get update \
 #RUN find /var/lib/mysql -type f -exec touch {} \; && service mysql start
 
 ADD start-mysql.sh /usr/local/bin/
+ADD start-maxwell.sh /usr/local/bin/
 ADD my-maxwell.cnf /etc/mysql/conf.d/
+ADD mysql-maxwell-init.sql /tmp/
 
 ENTRYPOINT find /var/lib/mysql -type f -exec touch {} \; && service mysql start \
     && /etc/init.d/elasticsearch start \
     && /etc/init.d/grafana-server start \
     && confluent start \
+    && start-maxwell.sh \
+    && bash
