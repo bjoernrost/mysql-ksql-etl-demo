@@ -15,6 +15,7 @@ RUN   apt-get update \
 
 ADD start-mysql.sh /usr/local/bin/
 ADD start-maxwell.sh /usr/local/bin/
+ADD start-ksql.sh /usr/local/bin/
 ADD my-maxwell.cnf /etc/mysql/conf.d/
 ADD mysql-maxwell-init.sql /tmp/
 
@@ -23,4 +24,5 @@ ENTRYPOINT find /var/lib/mysql -type f -exec touch {} \; && service mysql start 
     && /etc/init.d/grafana-server start \
     && confluent start \
     && start-maxwell.sh \
+    && start-ksql.sh \
     && bash
