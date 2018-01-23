@@ -1,0 +1,27 @@
+create stream orders_raw (data map(varchar, varchar)) with (kafka_topic = 'maxwell_code_orders', value_format = 'JSON');
+
+create stream orders_flat as select data['id'] as id, data['product'] as product, data['price'] as price, data['user_id'] as user_id from orders_raw;
+
+create stream orders as select cast(id as integer) as id, product, cast(price as bigint) as price, cast(user_id as integer) as user_id from orders_flat;
+
+-- i would rather do this if it wouldn't fail
+create stream orders_fails as select cast(data['id'] as integer) as id from orders_raw ;
+
+-- also, this is broken
+create stream orders_partby as select cast(id as integer) as id, product, cast(price as integer) as price, cast(user_id as integer) as user_id from orders_flat partition by id;
+
+
+select product, count(*), sum(price) from orders window tumbling (size 15 seconds) group by product;
+
+-- now the table
+create table orders_per_15s as select product, count(*), sum(price) from orders window tumbling (size 15 seconds) group by product;
+
+
+
+create stream orders_casted as select cast(id as integer) as id, product, cast(price as bigint) price from orders;
+
+
+
+connect-standalone /etc/schema-registry/connect-avro-standalone.properties /etc/kafka-connect-jdbc/mysql-users.properties
+
+No SUM aggregate function with Schema{INT32}  argument type exists!
