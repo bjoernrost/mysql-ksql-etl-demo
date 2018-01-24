@@ -24,6 +24,7 @@ ADD users.csv /var/lib/mysql-files/
 ADD db-setup.sql /var/lib/mysql-files/
 ADD db-inserts.sh /
 ADD mysql-users.properties /etc/kafka-connect-jdbc/
+ADD dashboard.json /usr/share/doc/ksql-clickstream-demo/
 
 ENTRYPOINT find /var/lib/mysql -type f -exec touch {} \; && service mysql start \
     && /etc/init.d/elasticsearch start \
