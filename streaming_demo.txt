@@ -61,7 +61,6 @@ select product, count(*), sum(price) from orders window tumbling (size 15 second
 --create table orders_per_min as select product, sum(price) amount from orders window tumbling (size 60 seconds) group by product;
 create table orders_per_min as select product, sum(price) amount from orders window hopping (size 60 seconds, advance by 15 seconds) group by product;
 
-
 CREATE TABLE orders_per_min_ts as select rowTime as event_ts, * from orders_per_min;
 
 --create table spending_per_min as select user_id, sum(price) amount from orders window tumbling (size 2 minutes) group by user_id ;
@@ -78,6 +77,8 @@ CREATE TABLE orders_per_min_ts as select rowTime as event_ts, * from orders_per_
  http://localhost:33000/dashboard/db/click-stream-analysis
 
 
+-- now play with some mysql inserts
+insert into orders (product, price, user_id) values ('lumpy', 100, 42);
 
 
 -- random notes. here be dragons
