@@ -5,6 +5,7 @@ I am using this as a playground and demo for a presentation on how to get data f
 These are my notes if you want to replay the same thing.
 
 ### prepare and run docker
+<<<<<<< HEAD
 Pull and run the docker image and start the container
 
 ``` sh 
@@ -105,7 +106,6 @@ To build the container after changes to the Dockerfile:
 ``` sh
 docker build -t brost/stream-etl:ksql .
 ```
-
 
 CREATE STREAM USER_CLICKSTREAM_ORDER AS SELECT userid, u.username, ip, u.city, request, status, bytes, o.product, o.price FROM clickstream c LEFT JOIN web_users u ON c.userid = u.user_id LEFT JOIN orders o on c.userid = o.user_id
 
