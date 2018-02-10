@@ -5,12 +5,12 @@ I am using this as a playground and demo for a presentation on how to get data f
 These are my notes if you want to replay the same thing.
 
 ### prepare and run docker
-Build the docker image and start the container
+Pull and run the docker image and start the container
 
 ``` sh 
-docker build -t brost 
+docker pull brost/stream-etl:ksql
 -- forwarding the kafka ports so i can connect from my laptop,too
-docker run -p 2181:2181 -p 9092:9092 -p 9093:9093 -p 33000:3000 -ti brost bash
+docker run -p 2181:2181 -p 9092:9092 -p 9093:9093 -p 33000:3000 -ti brost/stream-etl:ksql bash
 ```
 
 ### review the bits that are already running
@@ -100,6 +100,13 @@ insert into orders (product, price, user_id) values ('lumpy', 100, 42);
 ```
 
 -- random notes. here be dragons
+To build the container after changes to the Dockerfile:
+
+``` sh
+docker build -t brost/stream-etl:ksql .
+```
+
+
 CREATE STREAM USER_CLICKSTREAM_ORDER AS SELECT userid, u.username, ip, u.city, request, status, bytes, o.product, o.price FROM clickstream c LEFT JOIN web_users u ON c.userid = u.user_id LEFT JOIN orders o on c.userid = o.user_id
 
 -- i would rather do this if it wouldn't fail
