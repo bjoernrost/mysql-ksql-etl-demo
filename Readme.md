@@ -5,7 +5,6 @@ I am using this as a playground and demo for a presentation on how to get data f
 These are my notes if you want to replay the same thing.
 
 ### prepare and run docker
-<<<<<<< HEAD
 Pull and run the docker image and start the container
 
 ``` sh 
