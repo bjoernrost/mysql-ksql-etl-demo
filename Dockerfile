@@ -13,7 +13,6 @@ RUN   apt-get update \
     && echo "rest.port=18083" >> /etc/schema-registry/connect-avro-standalone.properties \
     && curl -sLo - https://github.com/zendesk/maxwell/releases/download/v1.12.0/maxwell-1.12.0.tar.gz | tar zxvf -
 
-#RUN find /var/lib/mysql -type f -exec touch {} \; && service mysql start
 
 ADD start-mysql.sh /usr/local/bin/
 ADD start-maxwell.sh /usr/local/bin/
@@ -29,8 +28,8 @@ ADD orders-to-grafana.sh /usr/share/doc/ksql-clickstream-demo/
 ADD datagen-init.sh /
 
 ENTRYPOINT find /var/lib/mysql -type f -exec touch {} \; && service mysql start \
-    && /etc/init.d/elasticsearch start \
     && /etc/init.d/grafana-server start \
+    && /etc/init.d/elasticsearch start \
     && confluent start \
     && start-maxwell.sh \
     && start-ksql.sh \
