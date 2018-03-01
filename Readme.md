@@ -34,12 +34,6 @@ cat /usr/local/bin/start-maxwell.sh
 /maxwell-1.12.0/bin/maxwell --user='maxwell' --password='maxwell' --host='127.0.0.1' --producer=stdout
 ```
 
-If you want to follow the original clickstream demo, this will start the data generation scripts.
-``` sh
--- initialize the datagen topics
-./init-datagen.sh
-```
-
 Check for existing topics, there should be one called maxwell_code_orders
 
 ``` sh
@@ -51,7 +45,6 @@ start ksql, look around and create the ksql objects
 ``` sh
 -- start ksql-cli and initialize the clickstream topics
 ksql-cli remote http://localhost:8080
-run script '/usr/share/doc/ksql-clickstream-demo/clickstream-schema.sql';
 
 list topics;
 list streams;
@@ -99,7 +92,7 @@ Now you can enter new rows into the orders table and watch the dashboard update.
 insert into orders (product, price, user_id) values ('lumpy', 100, 42);
 ```
 
--- random notes. here be dragons
+## random notes. here be dragons
 To build the container after changes to the Dockerfile:
 
 ``` sh
