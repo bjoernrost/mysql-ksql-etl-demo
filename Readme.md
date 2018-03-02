@@ -101,15 +101,14 @@ docker build -t brost/stream-etl:ksql .
 
 CREATE STREAM USER_CLICKSTREAM_ORDER AS SELECT userid, u.username, ip, u.city, request, status, bytes, o.product, o.price FROM clickstream c LEFT JOIN web_users u ON c.userid = u.user_id LEFT JOIN orders o on c.userid = o.user_id
 
--- i would rather do this if it wouldn't fail
---create stream orders_fails as select cast(data['id'] as integer) as id from orders_raw ;
+i would rather do this if it wouldn't fail
+```create stream orders_fails as select cast(data['id'] as integer) as id from orders_raw ;```
 
--- also, this is broken
---create stream orders_partby as select cast(id as integer) as id, product, cast(price as integer) as price, cast(user_id as integer) as user_id from orders_flat partition by id;
+also, this seems to be broken
+```create stream orders_partby as select cast(id as integer) as id, product, cast(price as integer) as price, cast(user_id as integer) as user_id from orders_flat partition by id;```
 
 --create table spending_per_min as select user_id, sum(price) amount from orders window tumbling (size 2 minutes) group by user_id ;
 
 --create table user_tally as select user_id, sum(price) amount from orders group by user_id;
-
 
 No SUM aggregate function with Schema{INT32}  argument type exists!
