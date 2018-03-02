@@ -14,18 +14,18 @@ RUN   apt-get update \
     && curl -sLo - https://github.com/zendesk/maxwell/releases/download/v1.12.0/maxwell-1.12.0.tar.gz | tar zxvf -
 
 
-ADD start-mysql.sh /usr/local/bin/
-ADD start-maxwell.sh /usr/local/bin/
-ADD start-ksql.sh /usr/local/bin/
-ADD my-maxwell.cnf /etc/mysql/conf.d/
-ADD mysql-maxwell-init.sql /tmp/
-ADD users.csv /var/lib/mysql-files/
-ADD db-setup.sql /var/lib/mysql-files/
-ADD db-inserts.sh /
-ADD mysql-users.properties /etc/kafka-connect-jdbc/
-ADD dashboard.json /usr/share/doc/ksql-clickstream-demo/
-ADD orders-to-grafana.sh /usr/share/doc/ksql-clickstream-demo/
-ADD datagen-init.sh /
+ADD files/start-mysql.sh /usr/local/bin/
+ADD files/start-maxwell.sh /usr/local/bin/
+ADD files/start-ksql.sh /usr/local/bin/
+ADD files/my-maxwell.cnf /etc/mysql/conf.d/
+ADD files/mysql-maxwell-init.sql /tmp/
+ADD files/users.csv /var/lib/mysql-files/
+ADD files/db-setup.sql /var/lib/mysql-files/
+ADD files/db-inserts.sh /
+ADD files/mysql-users.properties /etc/kafka-connect-jdbc/
+ADD files/dashboard.json /usr/share/doc/ksql-clickstream-demo/
+ADD files/orders-to-grafana.sh /usr/share/doc/ksql-clickstream-demo/
+ADD files/datagen-init.sh /
 
 ENTRYPOINT find /var/lib/mysql -type f -exec touch {} \; && service mysql start \
     && /etc/init.d/grafana-server start \
