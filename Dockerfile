@@ -1,8 +1,6 @@
 # https://confluentinc.atlassian.net/browse/KSQL-292
 
-ARG DOCKER_UPSTREAM_REGISTRY
-
-FROM ${DOCKER_UPSTREAM_REGISTRY}confluentinc/ksql-clickstream-demo:0.3
+FROM confluentinc/ksql-clickstream-demo:0.3
 
 EXPOSE 3000
 
