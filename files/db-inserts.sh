@@ -14,6 +14,6 @@ PRODUCT=${arr[$rand]}
 #echo $PRODUCT
 #echo $PRICE
 #echo $USERID
-mysql code -e "INSERT INTO orders (product, price, user_id) VALUES (\"$PRODUCT\", $PRICE, $USERID)"
+mysql code -e "INSERT INTO orders (product, price, user_id, ordertime) VALUES (\"$PRODUCT\", $PRICE, $USERID, now())"
 sleep 0.1
 done
