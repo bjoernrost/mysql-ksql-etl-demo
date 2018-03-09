@@ -1,6 +1,6 @@
 # https://confluentinc.atlassian.net/browse/KSQL-292
 
-FROM confluentinc/ksql-clickstream-demo:0.3
+FROM confluentinc/ksql-clickstream-demo:0.5
 
 EXPOSE 3000
 
