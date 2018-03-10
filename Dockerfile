@@ -9,7 +9,8 @@ RUN   apt-get update \
     && echo "advertised.listeners=PLAINTEXT://localhost:9092" >> /etc/kafka/server.properties \
     && echo "advertised.host.name=localhost" >> /etc/kafka/server.properties \
     && echo "rest.port=18083" >> /etc/schema-registry/connect-avro-standalone.properties \
-    && curl -sLo - https://github.com/zendesk/maxwell/releases/download/v1.12.0/maxwell-1.12.0.tar.gz | tar zxvf -
+    && curl -sLo - https://github.com/zendesk/maxwell/releases/download/v1.12.0/maxwell-1.12.0.tar.gz | tar zxvf - \
+    && sed -e '/sysctl/s/$/ 2>\/dev\/null/g' -i /etc/init.d/elasticsearch
 
 
 ADD files/start-mysql.sh /usr/local/bin/
