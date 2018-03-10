@@ -9,14 +9,17 @@ RUN   apt-get update \
     && echo "advertised.listeners=PLAINTEXT://localhost:9092" >> /etc/kafka/server.properties \
     && echo "advertised.host.name=localhost" >> /etc/kafka/server.properties \
     && echo "rest.port=18083" >> /etc/schema-registry/connect-avro-standalone.properties \
-    && curl -sLo - https://github.com/zendesk/maxwell/releases/download/v1.12.0/maxwell-1.12.0.tar.gz | tar zxvf -
+    && curl -sLo - https://github.com/zendesk/maxwell/releases/download/v1.12.0/maxwell-1.12.0.tar.gz | tar zxvf - \
+    && mkdir /share/java/kafka/plugins \
+    && wget -qO- https://repo1.maven.org/maven2/io/debezium/debezium-connector-mysql/0.7.4/debezium-connector-mysql-0.7.4-plugin.tar.gz | tar xvz -C /share/java/kafka/plugins/ \
+    && ln -s /share/java/kafka/plugins/debezium-connector-mysql/*.jar /share/java/kafka/
 
 
 ADD files/start-mysql.sh /usr/local/bin/
+ADD files/connect-debezium.sh /usr/local/bin/
 ADD files/start-maxwell.sh /usr/local/bin/
 ADD files/start-ksql.sh /usr/local/bin/
 ADD files/my-maxwell.cnf /etc/mysql/conf.d/
-ADD files/mysql-maxwell-init.sql /tmp/
 ADD files/users.csv /var/lib/mysql-files/
 ADD files/db-setup.sql /var/lib/mysql-files/
 ADD files/db-inserts.sh /
@@ -30,6 +33,6 @@ ENTRYPOINT find /var/lib/mysql -type f -exec touch {} \; && service mysql start 
     && /etc/init.d/elasticsearch start \
     && confluent start \
     && start-maxwell.sh \
+    && connect-debezium.sh \
     && start-ksql.sh \
-    && ln -s /usr/share/java/mysql.jar /share/java/kafka-connect-jdbc/ \
     && bash

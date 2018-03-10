@@ -8,3 +8,8 @@ load data infile '/var/lib/mysql-files/users.csv' into table users fields termin
 CREATE TABLE orders (id integer primary key auto_increment, product varchar(42) not null, price integer not null, user_id int, ordertime datetime not null  );
 
 INSERT INTO orders (product, price, user_id) values ('hello world', 20, 42);
+
+GRANT SELECT, RELOAD, SHOW DATABASES, REPLICATION SLAVE, REPLICATION CLIENT ON *.* TO 'debezium' IDENTIFIED BY 'dbz';
+
+GRANT SELECT, REPLICATION CLIENT, REPLICATION SLAVE on *.* to 'maxwell'@'localhost' identified by 'maxwell';
+GRANT ALL on maxwell.* to 'maxwell'@'localhost';
