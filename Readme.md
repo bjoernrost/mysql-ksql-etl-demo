@@ -46,17 +46,16 @@ start ksql, look around and create the ksql objects
 -- start ksql-cli and initialize the clickstream topics
 ksql-cli remote http://localhost:8080
 
+-- note the topic localhost.code.orders from connect-debezium
+
 list topics;
-list streams;
-list tables;
 
 -- now set up out orders table step by step
+-- if the stream is already in avro, we do not even have to specify columns
 
-create stream orders_raw (data map(varchar, varchar)) with (kafka_topic = 'maxwell_code_orders', value_format = 'JSON');
+create stream orders_raw with (kafka_topic = 'localhost.code.orders', value_format = 'AVRO', timestamp='after_ordertime');
 
-create stream orders_flat as select data['id'] as id, data['product'] as product, data['price'] as price, data['user_id'] as user_id from orders_raw;
-
-create stream orders as select cast(id as integer) as id, product, cast(price as bigint) as price, cast(user_id as integer) as user_id from orders_flat;
+create stream orders as select after_id as id, after_product as product, cast(after_price as bigint) price, after_user_id as user_id, after_ordertime as ordertime from orders_raw;
 
 -- select product, count(*), sum(price) from orders window tumbling (size 15 seconds) group by product;
 
@@ -65,6 +64,9 @@ create table orders_per_min as select product, sum(price) amount from orders win
 
 -- and enrich that with the event timestamp
 CREATE TABLE orders_per_min_ts as select rowTime as event_ts, * from orders_per_min;
+
+list streams;
+list tables;
 ```
 
 ### load kafka topics into elastic
