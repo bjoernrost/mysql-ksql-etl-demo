@@ -63,7 +63,7 @@ create stream orders as select after_id as id, after_product as product, cast(af
 create table orders_per_min as select product, sum(price) amount from orders window hopping (size 60 seconds, advance by 15 seconds) group by product;
 
 -- and enrich that with the event timestamp
-CREATE TABLE orders_per_min_ts as select rowTime as event_ts, * from orders_per_min;
+CREATE TABLE orders_per_min_ts WITH (value_format='JSON') as select rowTime as event_ts, * from orders_per_min;
 
 list streams;
 list tables;
