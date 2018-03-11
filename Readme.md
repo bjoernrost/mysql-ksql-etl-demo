@@ -26,15 +26,9 @@ mysql code
 mysql> describe orders;
 mysql> select * from oders limit 42;
 mysql> insert into orders (product, price, user_id) values ('lumpy', 100, 42);
-
--- quick view at the maxwell config (it's already running)
-cat /usr/local/bin/start-maxwell.sh
-
--- we can product to stdout to see the json pieces
-/maxwell-1.12.0/bin/maxwell --user='maxwell' --password='maxwell' --host='127.0.0.1' --producer=stdout
 ```
 
-Check for existing topics, there should be one called maxwell_code_orders
+Check for existing topics, there should be one called localhost.code.orders created by Debezium
 
 ``` sh
 -- show that all our topics are there
@@ -67,6 +61,7 @@ CREATE TABLE orders_per_min_ts WITH (value_format='JSON') as select rowTime as e
 
 list streams;
 list tables;
+list topics;
 ```
 
 ### load kafka topics into elastic
@@ -91,7 +86,10 @@ Now you can enter new rows into the orders table and watch the dashboard update.
 
 ``` sh
 -- now play with some mysql inserts
-insert into orders (product, price, user_id) values ('lumpy', 100, 42);
+insert into orders (product, price, user_id, ordertime) values ('lumpy', 500, 42, now());
+
+-- here is a late order - which window does this order count against?
+insert into orders (product, price, user_id, ordertime) values ('lumpy', 300, 42, date_sub(now(), interval 1 minute));
 ```
 
 ## random notes. here be dragons
@@ -103,10 +101,7 @@ docker build -t brost/stream-etl:ksql .
 
 CREATE STREAM USER_CLICKSTREAM_ORDER AS SELECT userid, u.username, ip, u.city, request, status, bytes, o.product, o.price FROM clickstream c LEFT JOIN web_users u ON c.userid = u.user_id LEFT JOIN orders o on c.userid = o.user_id
 
-i would rather do this if it wouldn't fail
-```create stream orders_fails as select cast(data['id'] as integer) as id from orders_raw ;```
-
-also, this seems to be broken
+This seems to be broken
 ```create stream orders_partby as select cast(id as integer) as id, product, cast(price as integer) as price, cast(user_id as integer) as user_id from orders_flat partition by id;```
 
 --create table spending_per_min as select user_id, sum(price) amount from orders window tumbling (size 2 minutes) group by user_id ;
