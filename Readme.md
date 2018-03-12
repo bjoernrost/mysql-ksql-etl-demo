@@ -1,6 +1,6 @@
 # rdbms->ksql->grafana demo
 
-I am using this as a playground and demo for a presentation on how to get data from a relational database into kafka, transform with KSQL and finally chart this in a real-time dashboard using grafana. It is heavily based on an existing ksql clickstream demo by confluent.
+I am using this as a playground and demo for a presentation on how to get data from a relational database into kafka, transform with KSQL and finally chart this in a real-time dashboard using grafana. It is heavily based on [an existing ksql clickstream demo by confluent](https://github.com/confluentinc/ksql/tree/v0.5/ksql-clickstream-demo#clickstream-analysis).
 
 These are my notes if you want to replay the same thing.
 

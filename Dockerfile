@@ -11,7 +11,8 @@ RUN   apt-get update \
     && echo "rest.port=18083" >> /etc/schema-registry/connect-avro-standalone.properties \
     && mkdir /share/java/kafka/plugins \
     && wget -qO- https://repo1.maven.org/maven2/io/debezium/debezium-connector-mysql/0.7.4/debezium-connector-mysql-0.7.4-plugin.tar.gz | tar xvz -C /share/java/kafka/plugins/ \
-    && ln -s /share/java/kafka/plugins/debezium-connector-mysql/*.jar /share/java/kafka/
+    && ln -s /share/java/kafka/plugins/debezium-connector-mysql/*.jar /share/java/kafka/ \
+    && sed -e '/sysctl/s/$/ 2>\/dev\/null/g' -i /etc/init.d/elasticsearch
 
 ADD files/db-init.sh /usr/local/bin/
 ADD files/connect-debezium.sh /usr/local/bin/
