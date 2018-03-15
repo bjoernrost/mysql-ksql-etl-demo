@@ -35,6 +35,11 @@ Check for existing topics, there should be one called localhost.code.orders crea
 kafka-topics --zookeeper localhost:2181 --list
 ```
 
+And we can run a console consumer to dump the contents of the debezium topic
+``` sh
+kafka-avro-console-consumer --bootstrap-server=localhost:9092 --topic=localhost.code.orders
+```
+
 start ksql, look around and create the ksql objects
 ``` sh
 -- start ksql-cli and initialize the clickstream topics
@@ -47,9 +52,12 @@ list topics;
 -- now set up out orders table step by step
 -- if the stream is already in avro, we do not even have to specify columns
 
-create stream orders_raw with (kafka_topic = 'localhost.code.orders', value_format = 'AVRO', timestamp='after_ordertime');
+create stream orders_raw with (kafka_topic = 'localhost.code.orders', value_format = 'AVRO', timestamp='ordertime');
 
-create stream orders as select after_id as id, after_product as product, cast(after_price as bigint) price, after_user_id as user_id, after_ordertime as ordertime from orders_raw;
+
+-- but we need to cast at least the price to bigint
+create stream orders as select id, product, cast(price as bigint) price, user_id, ordertime from orders_raw;
+
 
 -- select product, count(*), sum(price) from orders window tumbling (size 15 seconds) group by product;
 
