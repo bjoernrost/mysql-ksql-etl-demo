@@ -1,11 +1,10 @@
-# https://confluentinc.atlassian.net/browse/KSQL-292
-
-FROM confluentinc/ksql-clickstream-demo:0.5
+FROM confluentinc/ksql-clickstream-demo:4.1.0
 
 EXPOSE 3000
 
 RUN   apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y vim less mysql-server libmysql-java \
+    && echo "" >> /etc/kafka/server.properties \
     && echo "advertised.listeners=PLAINTEXT://localhost:9092" >> /etc/kafka/server.properties \
     && echo "advertised.host.name=localhost" >> /etc/kafka/server.properties \
     && echo "rest.port=18083" >> /etc/schema-registry/connect-avro-standalone.properties \
@@ -16,7 +15,6 @@ RUN   apt-get update \
 
 ADD files/db-init.sh /usr/local/bin/
 ADD files/connect-debezium.sh /usr/local/bin/
-ADD files/start-ksql.sh /usr/local/bin/
 ADD files/my-binlog.cnf /etc/mysql/conf.d/
 ADD files/users.csv /var/lib/mysql-files/
 ADD files/db-setup.sql /var/lib/mysql-files/
@@ -25,11 +23,10 @@ ADD files/dashboard.json /usr/share/doc/ksql-clickstream-demo/
 ADD files/orders-to-grafana.sh /usr/share/doc/ksql-clickstream-demo/
 ADD files/datagen-init.sh /
 
-ENTRYPOINT find /var/lib/mysql -type f -exec touch {} \; && service mysql start \
-    && /etc/init.d/grafana-server start \
+ENTRYPOINT /etc/init.d/grafana-server start \
+    && confluent start \
+    && find /var/lib/mysql -type f -exec touch {} \; && service mysql start \
     && /etc/init.d/elasticsearch start \
     && db-init.sh \
-    && confluent start \
     && connect-debezium.sh \
-    && start-ksql.sh \
     && bash

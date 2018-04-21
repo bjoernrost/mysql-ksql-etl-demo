@@ -43,7 +43,7 @@ kafka-avro-console-consumer --bootstrap-server=localhost:9092 --topic=localhost.
 start ksql, look around and create the ksql objects
 ``` sh
 -- start ksql-cli and initialize the clickstream topics
-ksql-cli remote http://localhost:8080
+ksql 
 
 -- note the topic localhost.code.orders from connect-debezium
 
