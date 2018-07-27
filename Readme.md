@@ -18,7 +18,7 @@ Docker already starts most of the daemons, mysql and background scripts. Have a 
 
 ``` sh
 -- there is already a shell script running that inserts random orders
-less db-insert.sh
+less db-inserts.sh
 
 -- let's see what's happening in mysql
 mysql code
