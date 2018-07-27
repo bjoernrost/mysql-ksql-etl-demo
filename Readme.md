@@ -24,7 +24,7 @@ less db-inserts.sh
 mysql code
 
 mysql> describe orders;
-mysql> select * from oders limit 42;
+mysql> select * from orders limit 42;
 mysql> insert into orders (product, price, user_id) values ('lumpy', 100, 42);
 ```
 
