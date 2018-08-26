@@ -1,4 +1,4 @@
-FROM confluentinc/ksql-clickstream-demo:4.1.0
+FROM confluentinc/ksql-clickstream-demo:5.0.0
 
 EXPOSE 3000
 
