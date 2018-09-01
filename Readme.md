@@ -88,7 +88,7 @@ cp dashboard.json clickstream-analysis-dashboard.json
 
 ### ready to view the results in your browser
 
-open http://localhost:33000/dashboard/db/click-stream-analysis and log in using admin/admin.
+open http://localhost:33000/dashboard/db/real-time-order-volume-by-product and log in using admin/admin.
 
 Now you can enter new rows into the orders table and watch the dashboard update.
 

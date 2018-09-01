@@ -3,7 +3,7 @@ FROM confluentinc/ksql-clickstream-demo:5.0.0
 EXPOSE 3000
 
 RUN   apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -y vim less mysql-server libmysql-java \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y vim less mysql-server libmysql-java procps \
     && echo "" >> /etc/kafka/server.properties \
     && echo "advertised.listeners=PLAINTEXT://localhost:9092" >> /etc/kafka/server.properties \
     && echo "advertised.host.name=localhost" >> /etc/kafka/server.properties \
