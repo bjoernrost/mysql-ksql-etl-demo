@@ -18,13 +18,13 @@ Docker already starts most of the daemons, mysql and background scripts. Have a 
 
 ``` sh
 -- there is already a shell script running that inserts random orders
-less db-insert.sh
+less db-inserts.sh
 
 -- let's see what's happening in mysql
 mysql code
 
 mysql> describe orders;
-mysql> select * from oders limit 42;
+mysql> select * from orders limit 42;
 mysql> insert into orders (product, price, user_id) values ('lumpy', 100, 42);
 ```
 
@@ -88,7 +88,7 @@ cp dashboard.json clickstream-analysis-dashboard.json
 
 ### ready to view the results in your browser
 
-open http://localhost:33000/dashboard/db/click-stream-analysis and log in using admin/admin.
+open http://localhost:33000/dashboard/db/real-time-order-volume-by-product and log in using admin/admin.
 
 Now you can enter new rows into the orders table and watch the dashboard update.
 
